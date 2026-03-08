@@ -1,0 +1,90 @@
+{
+  "type": "record",
+  "name": "CourierLocationEvent",
+  "namespace": "com.fooddelivery.v1",
+  "doc": "High-frequency GPS ping from courier mobile app (~every 15s per courier).",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "doc": "Unique ping ID \u2014 used for deduplication."
+    },
+    {
+      "name": "courier_id",
+      "type": "string",
+      "doc": "Join key with order_lifecycle_event and courier reference table."
+    },
+    {
+      "name": "order_id",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Active order. Null when idle."
+    },
+    {
+      "name": "zone_id",
+      "type": "string",
+      "doc": "Current zone (derived server-side from lat/lon)."
+    },
+    {
+      "name": "event_time",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      },
+      "doc": "GPS device timestamp \u2014 event-time."
+    },
+    {
+      "name": "ingestion_time",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      },
+      "doc": "Broker arrival time. Delta = network latency / late arrival."
+    },
+    {
+      "name": "latitude",
+      "type": "double"
+    },
+    {
+      "name": "longitude",
+      "type": "double"
+    },
+    {
+      "name": "speed_kmh",
+      "type": "double",
+      "doc": "Values >150 km/h are anomalous."
+    },
+    {
+      "name": "heading_degrees",
+      "type": "double"
+    },
+    {
+      "name": "courier_status",
+      "type": "string",
+      "doc": "ONLINE_IDLE | ONLINE_PICKUP | ONLINE_DELIVERING | OFFLINE"
+    },
+    {
+      "name": "vehicle_type",
+      "type": "string",
+      "doc": "BICYCLE | MOTORCYCLE | CAR | SCOOTER"
+    },
+    {
+      "name": "battery_pct",
+      "type": "int",
+      "doc": "Device battery 0\u2013100. Low battery correlates with OFFLINE events."
+    },
+    {
+      "name": "network_type",
+      "type": "string",
+      "doc": "5G | 4G | 3G | NO_SIGNAL. NO_SIGNAL = source of GPS gaps."
+    },
+    {
+      "name": "is_duplicate",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}
