@@ -12,8 +12,8 @@ Event Hub namespace: **`iesstsabbadbaa-grp-01-05`**.
 ```
 +----------------------+                     +----------------------+
 |  order_producer.py   |   confluent-kafka   |  Event Hubs topic    |
-|  (Avro, fastavro)    | ------------------> |  group_03_order_     |
-|                      |   SASL_SSL / PLAIN  |      lifecycle       |
+|  (Avro, fastavro)    | ------------------> |  group_03_orders     |
+|                      |   SASL_SSL / PLAIN  |                      |
 +----------------------+                     +----------+-----------+
                                                         |
 +----------------------+                                |
@@ -23,8 +23,8 @@ Event Hub namespace: **`iesstsabbadbaa-grp-01-05`**.
                                                   v     v
                                          +------------------------+
                                          |  Event Hubs topic      |
-                                         |  group_03_courier_     |
-                                         |      location          |
+                                         |  group_03_couriers     |
+                                         |                        |
                                          +-----------+------------+
                                                      |
                              spark.readStream.format("kafka")
@@ -164,7 +164,19 @@ For an accelerated demo, pass `--speed-multiplier 10.0` to both producers.
 
 The Spark script is structured as 13 `BLOCK N` sections. In Colab:
 
+> **Important — Colab compatibility:** Colab now ships Spark 4.x, which is
+> incompatible with the Kafka/Avro connectors we need (you'll see
+> `NoSuchFieldError: TASK_ATTEMPT_ID`). Before BLOCK 2, run in its own cell:
+>
+> ```python
+> !pip install -q pyspark==3.5.1
+> ```
+>
+> Then **Restart runtime** (Runtime → Restart). BLOCK 2 pins the Maven
+> packages to Spark 3.5.1 / Scala 2.12 to match.
+
 1. Upload `config.py` and `spark_streaming_to_blob.py` to the runtime.
+
 2. Paste each `BLOCK N` into its own notebook cell **in order**.
    - BLOCK 1 imports `config.py` — make sure the file is in the same directory.
    - BLOCK 2 builds the `SparkSession` with the Kafka + Avro + Azure Blob jars.
