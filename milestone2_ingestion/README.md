@@ -82,8 +82,8 @@ In the portal, navigate to the namespace `iesstsabbadbaa-grp-01-05` →
 
 | Event Hub name               | Partition count | Message retention |
 |------------------------------|-----------------|-------------------|
-| `group_03_order_lifecycle`   | **4**           | **3 days**        |
-| `group_03_courier_location`  | **4**           | **3 days**        |
+| `group_03_orders`   | **4**           | **3 days**        |
+| `group_03_couriers`  | **4**           | **3 days**        |
 
 Naming convention: `group_03_*`, matching the module's group allocation.
 
@@ -113,11 +113,11 @@ Open `config.py` and populate every empty string. Example:
 ```python
 event_hub_namespace = 'iesstsabbadbaa-grp-01-05'
 
-order_topic = 'group_03_order_lifecycle'
-order_producer_conn_str = 'Endpoint=sb://iesstsabbadbaa-grp-01-05.servicebus.windows.net/;SharedAccessKeyName=send-policy;SharedAccessKey=...;EntityPath=group_03_order_lifecycle'
-order_consumer_conn_str = 'Endpoint=sb://iesstsabbadbaa-grp-01-05.servicebus.windows.net/;SharedAccessKeyName=listen-policy;SharedAccessKey=...;EntityPath=group_03_order_lifecycle'
+order_topic = 'group_03_orders'
+order_producer_conn_str = 'Endpoint=sb://iesstsabbadbaa-grp-01-05.servicebus.windows.net/;SharedAccessKeyName=send-policy;SharedAccessKey=...;EntityPath=group_03_orders'
+order_consumer_conn_str = 'Endpoint=sb://iesstsabbadbaa-grp-01-05.servicebus.windows.net/;SharedAccessKeyName=listen-policy;SharedAccessKey=...;EntityPath=group_03_orders'
 
-courier_topic = 'group_03_courier_location'
+courier_topic = 'group_03_couriers'
 courier_producer_conn_str = '...'
 courier_consumer_conn_str = '...'
 
@@ -139,16 +139,16 @@ with `nohup`:
 # Order lifecycle feed
 nohup python order_producer.py \
     iesstsabbadbaa-grp-01-05 \
-    group_03_order_lifecycle \
-    "Endpoint=sb://...;SharedAccessKey=...;EntityPath=group_03_order_lifecycle" \
+    group_03_orders \
+    "Endpoint=sb://...;SharedAccessKey=...;EntityPath=group_03_orders" \
     --orders-per-hour 120 --speed-multiplier 1.0 \
     > order_producer.out 2>&1 &
 
 # Courier GPS feed
 nohup python courier_producer.py \
     iesstsabbadbaa-grp-01-05 \
-    group_03_courier_location \
-    "Endpoint=sb://...;SharedAccessKey=...;EntityPath=group_03_courier_location" \
+    group_03_couriers \
+    "Endpoint=sb://...;SharedAccessKey=...;EntityPath=group_03_couriers" \
     --num-couriers 30 --speed-multiplier 1.0 \
     > courier_producer.out 2>&1 &
 ```
