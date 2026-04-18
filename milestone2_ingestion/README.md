@@ -135,6 +135,8 @@ Each producer is self-contained and takes its credentials on the CLI — same
 as the professor's `avro_producer.py`. Launch them as background processes
 with `nohup`:
 
+INSERT PRODUCER KEYS INSIDE THE CODE BELOW!!! "Endpoint...": Insert YOUR Key
+
 ```bash
 # Order lifecycle feed
 nohup python order_producer.py \
